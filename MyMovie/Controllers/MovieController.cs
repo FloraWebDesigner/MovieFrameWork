@@ -155,7 +155,7 @@ namespace MyMovie.Controllers
             }
 
             // returns 201 Created with Location
-            return Created($"api/Movie/FindMovie/{MovieDto.movie_id}", MovieDto);
+            return Created($"api/Movie/FindMovie/{response.CreatedId}", MovieDto);
         }
 
         /// <summary>

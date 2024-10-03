@@ -141,7 +141,7 @@ namespace MyMovie.Controllers
             }
 
             // returns 201 Created with Location
-            return Created($"api/Ticket/Find/{response.CreatedId}", TicketDto);
+            return Created($"api/Ticket/FindTicket/{response.CreatedId}", TicketDto);
         }
 
         /// <summary>

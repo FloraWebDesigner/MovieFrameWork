@@ -154,7 +154,7 @@ namespace MyMovie.Controllers
             }
 
             // returns 201 Created with Location
-            return Created($"api/Viewer/FindViewer/{ViewerDto.customer_id}", ViewerDto);
+            return Created($"api/Viewer/FindViewer/{response.CreatedId}", ViewerDto);
         }
 
         /// <summary>
