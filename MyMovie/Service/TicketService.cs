@@ -5,6 +5,7 @@ using System;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.IO;
 using MyMovie.Data;
+using Microsoft.AspNetCore.Mvc;
 
 namespace MyMovie.Service
 {
@@ -37,7 +38,7 @@ namespace MyMovie.Service
                     movie_id = Ticket.Movie.movie_id,
                     movie_name = Ticket.Movie.movie_name,
                     customer_id = Ticket.Viewer.customer_id,
-                    customer_name = Ticket.Viewer.first_name+Ticket.Viewer.last_name,
+                    customer_name = Ticket.Viewer.first_name+" "+Ticket.Viewer.last_name,
                     identity = Ticket.Viewer.identity
                 });
             }
@@ -69,7 +70,7 @@ namespace MyMovie.Service
                 movie_id = Ticket.Movie.movie_id,
                 movie_name = Ticket.Movie.movie_name,
                 customer_id = Ticket.Viewer.customer_id,
-                customer_name = Ticket.Viewer.first_name + Ticket.Viewer.last_name,
+                customer_name = Ticket.Viewer.first_name +" "+ Ticket.Viewer.last_name,
                 identity = Ticket.Viewer.identity
             };
             return TicketDto;
@@ -119,7 +120,7 @@ namespace MyMovie.Service
             return serviceResponse;
         }
 
-
+        [HttpPost]
         public async Task<ServiceResponse> AddTicket(TicketDto TicketDto)
         {
             ServiceResponse serviceResponse = new();
@@ -201,11 +202,13 @@ namespace MyMovie.Service
 
         public async Task<IEnumerable<TicketDto>> ListTicketsForMovie(int id)
         {
+            // join MovieTickets on Ticket.ticket_id = MovieTickets.ticket_id WHERE MovieTickets.movie_id = {id}
+
             // WHERE movie_id == id
             List<Ticket> Tickets = await _context.Tickets
                 .Include(t => t.Movie)
                 .Include(t => t.Viewer)
-                .Where(t => t.Movie.movie_id == id)
+                .Where(t => t.Movie.movie_id == id && t.Movie != null && t.Viewer != null)
                 .ToListAsync();
 
             // empty list of data transfer object TicketDto
@@ -220,8 +223,9 @@ namespace MyMovie.Service
                     ticket_no = Ticket.ticket_no,
                     movie_id = Ticket.Movie.movie_id,
                     movie_name = Ticket.Movie.movie_name,
+                    
                     customer_id = Ticket.Viewer.customer_id,
-                    customer_name = Ticket.Viewer.first_name + Ticket.Viewer.last_name,
+                    customer_name = Ticket.Viewer.first_name +" "+ Ticket.Viewer.last_name,
                     identity = Ticket.Viewer.identity
                 });
             }
@@ -229,6 +233,9 @@ namespace MyMovie.Service
             return TicketDtos;
 
         }
+
+
+
 
         public async Task<IEnumerable<TicketDto>> ListTicketsForViewer(int id)
         {
@@ -252,7 +259,7 @@ namespace MyMovie.Service
                     movie_id = Ticket.Movie.movie_id,
                     movie_name = Ticket.Movie.movie_name,
                     customer_id = Ticket.Viewer.customer_id,
-                    customer_name = Ticket.Viewer.first_name + Ticket.Viewer.last_name,
+                    customer_name = Ticket.Viewer.first_name + " "+Ticket.Viewer.last_name,
                     identity = Ticket.Viewer.identity
                 });
             }

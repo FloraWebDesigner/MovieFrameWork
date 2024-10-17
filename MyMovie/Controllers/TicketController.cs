@@ -9,6 +9,7 @@ using MyMovie;
 using MyMovie.Models;
 using MyMovie.Service;
 using MyMovie.Interface;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MyMovie.Controllers
 {
@@ -87,6 +88,7 @@ namespace MyMovie.Controllers
         /// 204 No Content
         /// </returns>
         [HttpPut(template: "Update/{id}")]
+        [Authorize]
         public async Task<ActionResult> UpdateTicket(int id, TicketDto TicketDto)
         {
             // {id} in URL must match TicketId in POST Body
@@ -127,16 +129,18 @@ namespace MyMovie.Controllers
         /// 404 Not Found
         /// </returns>
         [HttpPost(template: "Add")]
+        [Authorize]
         public async Task<ActionResult<Ticket>> AddTicket(TicketDto TicketDto)
         {
             ServiceResponse response = await _TicketService.AddTicket(TicketDto);
-
+            Console.WriteLine($"movie_id: {TicketDto.movie_id}, customer_id: {TicketDto.customer_id}, ticket_no: {TicketDto.ticket_no}");
             if (response.Status == ServiceResponse.ServiceStatus.NotFound)
             {
                 return NotFound(response.Messages);
             }
             else if (response.Status == ServiceResponse.ServiceStatus.Error)
             {
+                Console.WriteLine("Error messages: " + string.Join(", ", response.Messages));
                 return StatusCode(500, response.Messages);
             }
 
@@ -154,6 +158,7 @@ namespace MyMovie.Controllers
         /// 404 Not Found
         /// </returns>
         [HttpDelete("Delete/{id}")]
+        [Authorize]
         public async Task<ActionResult> DeleteTicket(int id)
         {
             ServiceResponse response = await _TicketService.DeleteTicket(id);
@@ -184,6 +189,7 @@ namespace MyMovie.Controllers
         /// </example>
         //ListTicketsForMovie
         [HttpGet(template: "ListForMovie/{id}")]
+        [Authorize]
         public async Task<IActionResult> ListTicketsForMovie(int id)
         {
             // empty list of data transfer object TicketDto

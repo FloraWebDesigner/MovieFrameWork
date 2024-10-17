@@ -1,0 +1,84 @@
+﻿@model MyMovie.Models.MovieDto
+
+@{
+    ViewData["Title"] = "New";
+}
+
+<div class="container-fluid bg-dark p-3 text-white">
+    <h1 class="text-center">Add a Movie</h1>
+</div>
+<div class="container bg-light p-3 text-dark">
+    <div class="row align-items-center">
+        <div class="col-md-6">
+            <a asp-action="List" class="btn btn-outline-dark shadow">Back to Movie List</a>
+                <a href="/TicketPage/New" class="btn btn-outline-dark shadow">Go to Ticket Booking</a>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+                        <form asp-action="Add" class="form col-md-6 bg-dark text-white p-md-3 text-capitalize rounded-2 shadow mb-3">
+
+                            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                            <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label asp-for="movie_name" class="control-label"></label>
+                                <input asp-for="movie_name" class="form-control" />
+                                <span asp-validation-for="movie_name" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label asp-for="year" class="control-label"></label>
+                                <input asp-for="year" class="form-control" />
+                                <span asp-validation-for="year" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label asp-for="introduction" class="control-label"></label>
+                                <input asp-for="introduction" class="form-control" />
+                                <span asp-validation-for="introduction" class="text-danger"></span>
+                            </div>
+                             <div class="form-group mb-3">
+                                <label asp-for="rate" class="control-label"></label>
+                                <input asp-for="rate" class="form-control" />
+                                <span asp-validation-for="rate" class="text-danger"></span>
+                            </div>
+                         </div>
+                         <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label asp-for="duration" class="control-label"></label>
+                                <input asp-for="duration" class="form-control" />
+                                <span asp-validation-for="duration" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label asp-for="director" class="control-label"></label>
+                                <input asp-for="director" class="form-control" />
+                                <span asp-validation-for="director" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label asp-for="star" class="control-label"></label>
+                                <input asp-for="star" class="form-control" />
+                                <span asp-validation-for="star" class="text-danger"></span>
+                            </div>
+                            <div class="form-group mb-3">
+                                <label asp-for="ticket_quantity" class="control-label"></label>
+                                <input asp-for="ticket_quantity" class="form-control" />
+                                <span asp-validation-for="ticket_quantity" class="text-danger"></span>
+                            </div>
+                         </div>
+                         </div>
+                         <div class="form-group pb-3">
+                                <input type="submit" value="Create" class="btn btn-warning w-100" />
+                            </div>
+                        </form>
+                    </div>
+                </div>
+
+
+
+    </div>
+
+
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+}

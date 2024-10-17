@@ -1,0 +1,115 @@
+﻿@model MyMovie.Models.ViewModels.MovieDetails
+
+@{
+    ViewData["Title"] = "Details";
+}
+<div class="container-fluid bg-dark p-3 text-white">
+    <h1 class="text-center">Movie Overview</h1>
+</div>
+<div class="container-fluid bg-warning p-3 text-dark">
+<div class="container">
+    <h4>Detailed Information:</h4>
+
+    <dl class="row">
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Movie.movie_name)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Movie.movie_name)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Movie.year)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Movie.year)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Movie.introduction)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Movie.introduction)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Movie.rate)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Movie.rate)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Movie.duration)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Movie.duration)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Movie.director)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Movie.director)
+        </dd>
+        <dt class="col-sm-2">
+            @Html.DisplayNameFor(model => model.Movie.star)
+        </dt>
+        <dd class="col-sm-10">
+            @Html.DisplayFor(model => model.Movie.star)
+        </dd>
+        <div class="container">
+        <div class="d-flex flex-row justify-content-evenly">
+            <a asp-action="Edit" asp-route-id="@Model.Movie.movie_id" class="btn btn-dark" style="width:12rem;">Edit</a>
+            <a asp-action="Index" class="btn btn-dark" style="width:12rem;">Back to List</a>
+                    <a asp-controller="TicketPage" asp-action="NewFromMovie" asp-route-id="@Model.Movie.movie_id" class="btn btn-dark" style="width:12rem;">Book a Ticket</a>
+        </div>
+        </div>
+     </div>
+     </div>
+<div class="container-fluid bg-light p-3 text-black mb-lg-5">
+    <div class="container">
+        <h4 class="text-dark">
+            Current Bookings:
+        </h4>
+        <div class="d-flex flex-row my-3 justify-content-evenly p-3">
+            <div class="card me-3 shadow bg-warning text-dark pb-2" style="width: 15rem;">
+                <div class="card-body">
+                    <h5 class="card-title text-center">@Html.DisplayFor(model => model.Movie.ticket_quantity)</h5>
+                    <div class="card-text text-center">Tickets for Sale</div>
+                </div>
+            </div>
+            <div class="card me-3 shadow bg-warning text-dark" style="width: 15rem;">
+                <div class="card-body">
+                    <h5 class="card-title text-center "> @Html.DisplayFor(model => model.Movie.ticket_sold)</h5>
+                    <div class="card-text text-center">Tickets Sold</div>
+                </div>
+            </div>
+            <div class="card shadow bg-warning text-dark" style="width: 15rem;">
+                <div class="card-body">
+                    <h5 class="card-title text-center"> @Html.DisplayFor(model => model.Movie.ticket_available)</h5>
+                    <div class="card-text text-center">Tickets Available</div>
+                </div>
+            </div>
+
+        </div>
+        <div class="container">
+            <table class="table table-dark table-striped align-middle">
+                <thead>
+                    <tr class="table-dark">
+                        <th scope="col">Viewer</th>
+                        <th scope="col">Ticket No.</th>
+                        <th scope="col">Operation</th>
+                    </tr>
+                </thead>
+                <tbody>
+                @foreach (var TicketDto in Model.MovieTickets)
+                {
+                    <tr>
+                            <td>@TicketDto.customer_name</td>
+                            <td>@TicketDto.ticket_no</td>
+                            <td><a asp-controller="TicketPage" asp-action="Edit" asp-route-id="@TicketDto.ticket_id" class="btn btn-warning">Edit Ticket</a></td>
+                            </tr>
+                }
+                </tbody>
+            </table>
+    </div>
+</div>
+
+</div>
+

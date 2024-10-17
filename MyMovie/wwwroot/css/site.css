@@ -1,5 +1,7 @@
+@import url('https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400..700;1,400..700&family=Permanent+Marker&family=Ubuntu:ital,wght@0,300;0,400;1,300&display=swap');
+
 html {
-  font-size: 14px;
+    font-size: 14px;
 }
 
 @media (min-width: 768px) {
@@ -18,5 +20,26 @@ html {
 }
 
 body {
-  margin-bottom: 60px;
+    margin-bottom: 0px;
+    font-family: "Ubuntu","Lora",sans-serif;
+}
+
+.myBg{
+    background:url("../img/bg.jpg") no-repeat;
+    background-size:cover;
+}
+
+.indexWrap{
+    max-width:80%;
+    background:rgba(255,255,255,60%);
+    margin:auto;
+    border-radius:20px;
+}
+
+.entity{
+    color:white !important;
+}
+
+a.d-flex justify-content-center align-items-center rounded-circle bg-warning text-decoration-none :hover{
+    color:black !important;
 }

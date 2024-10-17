@@ -9,6 +9,7 @@ using MyMovie;
 using MyMovie.Models;
 using MyMovie.Service;
 using MyMovie.Interface;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MyMovie.Controllers
 {
@@ -95,15 +96,17 @@ namespace MyMovie.Controllers
         /// Response Code: 204 No Content
         /// </example>
         [HttpPut(template: "Update/{id}")]
+        [Authorize]
         public async Task<ActionResult> UpdateViewer(int id, ViewerDto ViewerDto)
         {
+            
             // {id} in URL must match customer_id in POST Body
             if (id != ViewerDto.customer_id)
             {
                 //400 Bad Request
                 return BadRequest();
             }
-
+            ViewerDto.membership = string.IsNullOrEmpty(ViewerDto.membership) ? "N" : "Y";
             ServiceResponse response = await _ViewerService.UpdateViewer(ViewerDto);
 
             if (response.Status == ServiceResponse.ServiceStatus.NotFound)
@@ -140,9 +143,12 @@ namespace MyMovie.Controllers
         /// Response Headers: Location: api/Viewer/Find/{customer_id}
         /// </example>
         [HttpPost(template: "Add")]
+        [Authorize]
         public async Task<ActionResult<Viewer>> AddViewer(ViewerDto ViewerDto)
         {
+            ViewerDto.membership = string.IsNullOrEmpty(ViewerDto.membership) ? "N" : "Y";
             ServiceResponse response = await _ViewerService.AddViewer(ViewerDto);
+            
 
             if (response.Status == ServiceResponse.ServiceStatus.NotFound)
             {
@@ -172,6 +178,7 @@ namespace MyMovie.Controllers
         /// Response Code: 204 No Content
         /// </example>
         [HttpDelete("Delete/{id}")]
+        [Authorize]
         public async Task<ActionResult> DeleteViewer(int id)
         {
             ServiceResponse response = await _ViewerService.DeleteViewer(id);
@@ -200,6 +207,7 @@ namespace MyMovie.Controllers
         }
 
         [HttpDelete(template:"RemoveForMovie/{id}")]
+        [Authorize]
         public async Task<ActionResult> RemoveViewerForMovie(int id)
         {
             ServiceResponse response = await _ViewerService.RemoveViewerForMovie(id);

@@ -1,0 +1,62 @@
+﻿@model MyMovie.Models.ViewerDto
+
+@{
+    ViewData["Title"] = "ConfirmDelete";
+}
+<div class="container-fluid bg-dark p-3">
+    <h1>Delete a Viewer</h1>
+</div>
+<div class="container-fluid bg-light p-3 text-dark">
+    <div class="container align-content-center">
+            <div>
+            <a asp-action="List" class="btn btn-warning shadow">Back to List</a>
+        </div>
+
+        <div class="row justify-content-center">
+            <h3 class="text-center">Are you sure you want to delete the viewer?</h3>
+            <div class="form col-md-6 mx-auto bg-white text-dark p-md-3 text-capitalize rounded-2 shadow mb-5 fs-5">
+                <div class="row m-2">
+                    <div class="col-md-4 text-start">
+            @Html.DisplayNameFor(model => model.first_name)</div>
+                        <div class="col-md-8 fw-bolder text-center">
+            @Html.DisplayFor(model => model.first_name)
+                        </div>
+                    </div>
+                    <div class="row m-2">
+                        <div class="col-md-4 text-start">
+            @Html.DisplayNameFor(model => model.last_name)
+                        </div>
+                        <div class="col-md-8 fw-bolder text-center">
+            @Html.DisplayFor(model => model.last_name)
+                        </div>
+                    </div>
+                    <div class="row m-2">
+                        <div class="col-md-4 text-start">
+            @Html.DisplayNameFor(model => model.identity)
+                        </div>
+                        <div class="col-md-8 fw-bolder text-center">
+            @Html.DisplayFor(model => model.identity)
+                        </div>
+                    </div>
+                    <div class="row m-2">
+                        <div class="col-md-4 text-start">
+            @Html.DisplayNameFor(model => model.membership)
+                        </div>
+                        <div class="col-md-8 fw-bolder text-center">
+            @Html.DisplayFor(model => model.membership)
+                        </div>
+                    </div>
+                    <div class="row m-2">
+                        <div class="col-md-4 text-start">
+            @Html.DisplayNameFor(model => model.age)
+                        </div>
+                        <div class="col-md-8 fw-bolder text-center">
+            @Html.DisplayFor(model => model.age)
+                        </div>
+                    </div>
+                    <div class="form-group p-3">
+    <form asp-action="Delete" asp-route-id="@Model.customer_id">
+        <input type="hidden" asp-for="customer_id" />
+                            <input type="submit" value="Delete" class="btn btn-dark w-100" />
+    </form>
+</div>

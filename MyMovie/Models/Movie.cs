@@ -42,5 +42,7 @@ namespace MyMovie.Models
 
         // to synthesis the information
         public int ticket_sold {  get; set; }
+        // add ticket available  - Oct 10
+        public int ticket_available { get; set; }
     }
 }

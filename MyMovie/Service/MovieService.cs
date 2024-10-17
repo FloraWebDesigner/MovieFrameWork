@@ -49,6 +49,7 @@ namespace MyMovie.Services
         {
             // first or default async will get the first movie matching the {id}
             var Movie = await _context.Movies
+                .Include(m => m.Tickets)
                 .FirstOrDefaultAsync(m => m.movie_id == id);
 
             // no Movie found
@@ -56,6 +57,13 @@ namespace MyMovie.Services
             {
                 return null;
             }
+
+            // add ticket_sold in  FindMovie instead of a separate TicketCountForMovie - Oct 10
+            int ticket_sold = Movie.Tickets.Count();
+
+            int ticket_quantity = (int)Movie.ticket_quantity;
+
+            int ticket_available = Math.Max(0, ticket_quantity - ticket_sold);
             // create an instance of MovieDto
             MovieDto MovieDto = new MovieDto()
             {
@@ -67,7 +75,12 @@ namespace MyMovie.Services
                 duration = (string)Movie.duration,
                 director = (string)Movie.director,
                 star = (string)Movie.star,
-                ticket_quantity = (int)Movie.ticket_quantity
+
+                ticket_quantity = ticket_quantity,
+                ticket_sold = ticket_sold,
+
+                // calculate the rest number of ticket
+                ticket_available = ticket_quantity- ticket_sold,
             };
             return MovieDto;
 
@@ -175,7 +188,8 @@ namespace MyMovie.Services
             return response;
         }
 
-        public async Task<MovieDto> TicketCountForMovie(int id)
+        // combined the below code into the FindMovie - Oct-10
+        public async Task<MovieDto?> TicketCountForMovie(int id)
         {
             // first or default async will get the first ticket matching the {id}
             var Movie = await _context.Movies
@@ -197,6 +211,7 @@ namespace MyMovie.Services
             };
             return MovieDto;
         }
+
 
         public async Task<IEnumerable<MovieDto>> ListMoviesForViewer(int id)
         {

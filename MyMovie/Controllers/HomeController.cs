@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using MyMovie.Models;
+using MyMovie.Models.ViewModels;
 using System.Diagnostics;
 
 namespace MyMovie.Controllers

@@ -2,7 +2,34 @@
     ViewData["Title"] = "Home Page";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+<div class="text-center mt-3 myBg" style="height:100vh;">
+    <div class="indexWrap text-center shadow p-3">
+        <h1 class="display-2 fw-bolder text-dark p-3">
+            Welcome to 2024
+            <span class="text-warning fw-bolder">Summer Movie </span>
+                <span>House</span>
+        </h1>
+    <p class="fs-4 fw-bolder text-dark">This is our movie-house ticket
+            <span class="text-warning bg-dark fw-bolder">booking system</span>
+        </p>
+    <div class="d-flex flex-row justify-content-evenly align-items-center mb-3">
+            <a class="d-flex justify-content-center align-items-center rounded-circle bg-warning text-decoration-none" style="width:10rem;height:10rem" asp-area="" asp-controller="MoviePage" asp-action="List">
+                <div class="entity fw-bold display-5 text-decoration-none">Movie</div>
+        </a>
+            <a class="d-flex justify-content-center align-items-center rounded-circle bg-warning text-decoration-none" style="width:10rem;height:10rem" asp-area="" asp-controller="TicketPage" asp-action="List">
+                <div class="entity fw-bold display-5">Ticket</div>
+            </a>
+            <a class="d-flex justify-content-center align-items-center rounded-circle bg-warning text-decoration-none" style="width:10rem;height:10rem" asp-area="" asp-controller="ViewerPage" asp-action="List">
+                <div class="entity fw-bold display-5 text-decoration-none">Viewer</div>
+            </a>
+
+    </div>
+    </div>
 </div>
+
+
+<style>
+    a.d-flex:hover {
+        color: black !important;
+    }
+</style>
