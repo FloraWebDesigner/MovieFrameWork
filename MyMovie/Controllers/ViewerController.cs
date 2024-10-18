@@ -196,7 +196,81 @@ namespace MyMovie.Controllers
 
         }
 
-        //ListViewersForMovie
+        /// <summary>
+        /// Show a list of viewers by movie
+        /// </summary>
+        /// <param name="id">movie_id</param>
+        /// <returns>
+        /// 204 No Content
+        /// or
+        /// 404 Not Found
+        /// </returns>
+        /// <example>
+        /// /api/Movie/ListForViewer/1
+        //ListViewersForMovie[
+        //  {
+        //    "movie_id": 7,
+        //    "movie_name": "Shutter Island",
+        //    "year": 2010,
+        //    "introduction": "Teddy Daniels and Chuck Aule, two US marshals, are sent to an asylum on a remote island in order to investigate the disappearance of a patient, where Teddy uncovers a shocking truth about the place.",
+        //    "rate": 8.2,
+        //    "duration": "2h 18m",
+        //    "director": "Martin Scorsese",
+        //    "star": "Leonardo DiCaprio,Emily Mortimer,Mark Ruffalo",
+        //    "ticket_quantity": 50,
+        //    "ticket_sold": 0,
+        //    "ticket_available": 0,
+        //    "hasPic": false,
+        //    "movieImgPath": null
+        //  },
+        //  {
+        //    "movie_id": 8,
+        //    "movie_name": "Cinderella",
+        //    "year": 2015,
+        //    "introduction": "When her father unexpectedly dies, young Ella finds herself at the mercy of her cruel stepmother and her scheming stepsisters. Never one to give up hope, Ella's fortunes begin to change after meeting a dashing stranger.",
+        //    "rate": 6.9,
+        //    "duration": "1h 45m",
+        //    "director": "Kenneth Branagh",
+        //    "star": "Lily James,Cate Blanchett,Richard Madden",
+        //    "ticket_quantity": 30,
+        //    "ticket_sold": 0,
+        //    "ticket_available": 0,
+        //    "hasPic": false,
+        //    "movieImgPath": null
+        //  },
+        //  {
+        //    "movie_id": 9,
+        //    "movie_name": "The Shawshank Redemption",
+        //    "year": 1994,
+        //    "introduction": "A banker convicted of uxoricide forms a friendship over a quarter century with a hardened convict, while maintaining his innocence and trying to remain hopeful through simple compassion.",
+        //    "rate": 9.3,
+        //    "duration": "2h 22m",
+        //    "director": "Frank Darabont",
+        //    "star": "Tim Robbins,Morgan Freeman,Bob Gunton",
+        //    "ticket_quantity": 50,
+        //    "ticket_sold": 0,
+        //    "ticket_available": 0,
+        //    "hasPic": false,
+        //    "movieImgPath": null
+        //  },
+        //  {
+        //    "movie_id": 23,
+        //    "movie_name": "Humber History",
+        //    "year": 2024,
+        //    "introduction": "The history of Humber college",
+        //    "rate": 10,
+        //    "duration": "1 hr",
+        //    "director": "Christine",
+        //    "star": "Students",
+        //    "ticket_quantity": 10,
+        //    "ticket_sold": 0,
+        //    "ticket_available": 0,
+        //    "hasPic": false,
+        //    "movieImgPath": null
+        //  }
+        //]
+        /// ->
+        /// </example>
         [HttpGet(template: "ListForMovie/{id}")]
         public async Task<IActionResult> ListViewersForMovie(int id)
         {
@@ -206,6 +280,21 @@ namespace MyMovie.Controllers
             return Ok(ViewerDtos);
         }
 
+
+
+        /// <summary>
+        /// Delete a viewer under the movie
+        /// </summary>
+        /// <param name="id">customer_id</param>
+        /// <returns>
+        /// 204 No Content
+        /// or
+        /// 404 Not Found
+        /// </returns>
+        /// <example>
+        /// /api/Viewer/RemoveForMovie/4
+        /// -> the viewer with customer_id = 4 has been removed from the movie
+        /// </example>
         [HttpDelete(template:"RemoveForMovie/{id}")]
         [Authorize]
         public async Task<ActionResult> RemoveViewerForMovie(int id)

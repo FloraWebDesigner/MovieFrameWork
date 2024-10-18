@@ -115,7 +115,7 @@ namespace MyMovie.Controllers
         }
 
         /// <summary>
-        /// Adds an Ticket
+        /// Add an Ticket
         /// </summary>
         /// <param name="TicketDto">The required information to add the ticket (ticket_id,ticket_no,movie_id,Customer_id)</param>
         /// <example>

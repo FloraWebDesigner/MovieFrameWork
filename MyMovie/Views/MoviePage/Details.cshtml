@@ -6,60 +6,76 @@
 <div class="container-fluid bg-dark p-3 text-white">
     <h1 class="text-center">Movie Overview</h1>
 </div>
-<div class="container-fluid bg-warning p-3 text-dark">
-<div class="container">
-    <h4>Detailed Information:</h4>
+<div class="container-fluid bg-warning p-3 text-dark">   
 
-    <dl class="row">
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Movie.movie_name)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Movie.movie_name)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Movie.year)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Movie.year)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Movie.introduction)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Movie.introduction)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Movie.rate)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Movie.rate)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Movie.duration)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Movie.duration)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Movie.director)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Movie.director)
-        </dd>
-        <dt class="col-sm-2">
-            @Html.DisplayNameFor(model => model.Movie.star)
-        </dt>
-        <dd class="col-sm-10">
-            @Html.DisplayFor(model => model.Movie.star)
-        </dd>
+    <div class="container">
+        <div class="row mx-2">
+        <div class="col-md-10">
+                <h4>Detailed Information:</h4>
+            <div class="row">
+                <div class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Movie.movie_name)
+                </div>
+                <div class="col-sm-10">
+                    @Html.DisplayFor(model => model.Movie.movie_name)
+                </div>
+                <div class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Movie.year)
+                </div>
+                <div class="col-sm-10">
+                    @Html.DisplayFor(model => model.Movie.year)
+                </div>
+                <div class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Movie.introduction)
+                </div>
+                <div class="col-sm-10">
+                    @Html.DisplayFor(model => model.Movie.introduction)
+                </div>
+                <div class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Movie.rate)
+                </div>
+                <div class="col-sm-10">
+                    @Html.DisplayFor(model => model.Movie.rate)
+                </div>
+                <div class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Movie.duration)
+                </div>
+                <div class="col-sm-10">
+                    @Html.DisplayFor(model => model.Movie.duration)
+                </div>
+                <div class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Movie.director)
+                </div>
+                <div class="col-sm-10">
+                    @Html.DisplayFor(model => model.Movie.director)
+                </div>
+                <div class="col-sm-2">
+                    @Html.DisplayNameFor(model => model.Movie.star)
+                </div>
+                <div class="col-sm-10">
+                    @Html.DisplayFor(model => model.Movie.star)
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 text-center">
+            @if (Model.Movie.HasPic)
+            {
+                    <img src="@Model.Movie.MovieImgPath" style="width:12rem; height:15rem; object-fit: cover;" />
+                }
+                else
+                {
+                    <img src="~/img/movies/placeholder.jpg" style="width:12rem; height:15rem; object-fit: cover;" />
+                    
+                }
+            </div>
         <div class="container">
-        <div class="d-flex flex-row justify-content-evenly">
-            <a asp-action="Edit" asp-route-id="@Model.Movie.movie_id" class="btn btn-dark" style="width:12rem;">Edit</a>
-            <a asp-action="Index" class="btn btn-dark" style="width:12rem;">Back to List</a>
-                    <a asp-controller="TicketPage" asp-action="NewFromMovie" asp-route-id="@Model.Movie.movie_id" class="btn btn-dark" style="width:12rem;">Book a Ticket</a>
+        <div class="d-flex flex-row justify-content-between my-2">
+            <a asp-action="Edit" asp-route-id="@Model.Movie.movie_id" class="btn btn-dark" style="width:20rem;">Edit</a>
+            <a asp-action="Index" class="btn btn-dark" style="width:20rem;">Back to List</a>
+                    <a asp-controller="TicketPage" asp-action="NewFromMovie" asp-route-id="@Model.Movie.movie_id" class="btn btn-dark" style="width:20rem;">Book a Ticket</a>
+ 
         </div>
-        </div>
+     </div>
      </div>
      </div>
 <div class="container-fluid bg-light p-3 text-black mb-lg-5">

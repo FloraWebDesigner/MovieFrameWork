@@ -2,9 +2,18 @@
 using MyMovie.Models;
 using Microsoft.EntityFrameworkCore;
 using System;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+//using static System.Runtime.InteropServices.JavaScript.JSType;
 using System.IO;
 using MyMovie.Data;
+using System.ComponentModel.DataAnnotations;
+using MyMovie.Data.Migrations;
+using System.Diagnostics;
+using Microsoft.AspNetCore.Authorization;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace MyMovie.Services
 {
@@ -28,7 +37,7 @@ namespace MyMovie.Services
             foreach (Movie Movie in Movies)
             {
                 // create new instance of MovieDto, add to list
-                MovieDtos.Add(new MovieDto()
+                MovieDto MovieDto=new MovieDto()
                 {
                     movie_id = Movie.movie_id,
                     movie_name = Movie.movie_name,
@@ -38,10 +47,22 @@ namespace MyMovie.Services
                     duration = (string)Movie.duration,
                     director = (string)Movie.director,
                     star = (string)Movie.star,
-                    ticket_quantity = (int)Movie.ticket_quantity
+                    ticket_quantity = (int)Movie.ticket_quantity,
+                    HasPic=Movie.HasPic,
 
-                });
+                };
+                if (Movie.HasPic)
+                {
+                    MovieDto.MovieImgPath = $"/img/movies/{Movie.movie_id}{Movie.PicExtension}";
+                }
+
+                
+
+                MovieDtos.Add(MovieDto);
             }
+
+
+
             return MovieDtos;
         }
 
@@ -60,9 +81,7 @@ namespace MyMovie.Services
 
             // add ticket_sold in  FindMovie instead of a separate TicketCountForMovie - Oct 10
             int ticket_sold = Movie.Tickets.Count();
-
             int ticket_quantity = (int)Movie.ticket_quantity;
-
             int ticket_available = Math.Max(0, ticket_quantity - ticket_sold);
             // create an instance of MovieDto
             MovieDto MovieDto = new MovieDto()
@@ -80,8 +99,17 @@ namespace MyMovie.Services
                 ticket_sold = ticket_sold,
 
                 // calculate the rest number of ticket
-                ticket_available = ticket_quantity- ticket_sold,
+                ticket_available = ticket_quantity - ticket_sold,
+                // identify if there's a poster pic
+                HasPic = (bool)Movie.HasPic,
             };
+
+            if (Movie.HasPic)
+            {
+                // if yes, then get the url of that image
+                MovieDto.MovieImgPath = $"/img/movies/{Movie.movie_id}{Movie.PicExtension}";
+            }
+          
             return MovieDto;
 
         }
@@ -90,21 +118,32 @@ namespace MyMovie.Services
         {
             ServiceResponse serviceResponse = new();
 
-            // Create instance of Movie
-            Movie Movie = new Movie()
+            Movie? Movie = await _context.Movies.FindAsync(MovieDto.movie_id);
+
+
+                       if (Movie == null)
             {
-                movie_id = MovieDto.movie_id,
-                movie_name = MovieDto.movie_name,
-                year = (int)MovieDto.year,
-                introduction = (string)MovieDto.introduction,
-                rate = (decimal)MovieDto.rate,
-                duration = (string)MovieDto.duration,
-                director = (string)MovieDto.director,
-                star = (string)MovieDto.star,
-                ticket_quantity = (int)MovieDto.ticket_quantity
-            };
+                serviceResponse.Messages.Add("Movie could not be found");
+                serviceResponse.Status = ServiceResponse.ServiceStatus.Error;
+                return serviceResponse;
+            }
+
+            Movie.movie_id = MovieDto.movie_id;
+            Movie.movie_name = MovieDto.movie_name;
+            Movie.year = (int)MovieDto.year;
+            Movie.introduction = (string)MovieDto.introduction;
+            Movie.rate = (decimal)MovieDto.rate;
+            Movie.duration = (string)MovieDto.duration;
+            Movie.director = (string)MovieDto.director;
+            Movie.star = (string)MovieDto.star;
+            Movie.ticket_quantity = (int)MovieDto.ticket_quantity;
+
+
             // flags that the object has changed
             _context.Entry(Movie).State = EntityState.Modified;
+            // handled by another method
+            _context.Entry(Movie).Property(p => p.HasPic).IsModified = false;
+            _context.Entry(Movie).Property(p => p.PicExtension).IsModified = false;
 
             try
             {
@@ -123,7 +162,7 @@ namespace MyMovie.Services
         }
 
 
-        public async Task<ServiceResponse> AddMovie(MovieDto MovieDto)
+        public async Task<ServiceResponse> AddMovie(MovieDto MovieDto, IFormFile MoviePic)
         {
             ServiceResponse serviceResponse = new();
             // Create instance of Movie
@@ -137,10 +176,18 @@ namespace MyMovie.Services
                 duration = (string)MovieDto.duration,
                 director = (string)MovieDto.director,
                 star = (string)MovieDto.star,
-                ticket_quantity = (int)MovieDto.ticket_quantity
+                ticket_quantity = (int)MovieDto.ticket_quantity,
+                HasPic = (bool)MovieDto.HasPic,
+
             };
+            if (Movie.HasPic)
+            {
+
+                MovieDto.MovieImgPath = $"/img/movies/{Movie.movie_id}{Movie.PicExtension}";
+            };
+        
             // SQL Equivalent: Insert into Movies (..) values (..)
-            Console.WriteLine($"Movie Name: {MovieDto.movie_name}, Year: {MovieDto.year}, Rate: {MovieDto.rate}");
+            Console.WriteLine($"Movie Name: {MovieDto.movie_name}, Year: {MovieDto.year}, Path: {MovieDto.MovieImgPath}");
             try
             {
                 _context.Movies.Add(Movie);
@@ -207,7 +254,7 @@ namespace MyMovie.Services
                 movie_id = Movie.movie_id,
                 movie_name = Movie.movie_name,
                 ticket_quantity = (int)Movie.ticket_quantity,
-                ticket_sold=Movie.Tickets.Count()
+                ticket_sold = Movie.Tickets.Count()
             };
             return MovieDto;
         }
@@ -242,6 +289,94 @@ namespace MyMovie.Services
             }
             // return 200 OK with MovieDtos
             return MovieDtos;
+        }
+
+
+
+
+        public async Task<ServiceResponse> UpdateMovieImg(int id, IFormFile MoviePic)
+        {
+            Console.WriteLine($"UpdateMovieImg called with id={id}");
+            ServiceResponse response = new();
+
+            Movie? Movie = await _context.Movies.FindAsync(id);
+            if (Movie == null)
+            {
+                response.Status = ServiceResponse.ServiceStatus.NotFound;
+                response.Messages.Add($"Movie {id} not found");
+                return response;
+            }
+
+            if (MoviePic.Length > 0)
+            {
+
+
+                // remove old picture if exists
+                if (Movie.HasPic)
+                {
+                    string OldFileName = $"{Movie.movie_id}{Movie.PicExtension}";
+                    string OldFilePath = Path.Combine("wwwroot/img/movies/", OldFileName);
+                    if (File.Exists(OldFilePath))
+                    {
+                        File.Delete(OldFilePath);
+                    }
+
+                }
+
+
+                //establish valid file types (can be changed to other file extensions if desired!)
+                List<string> Extensions = new List<string> { ".jpeg", ".jpg", ".png", ".gif" };
+                string MoviePicExtension = Path.GetExtension(MoviePic.FileName).ToLowerInvariant();
+                if (!Extensions.Contains(MoviePicExtension))
+                {
+                    response.Messages.Add($"{MoviePicExtension} is not a valid file extension");
+                    response.Status = ServiceResponse.ServiceStatus.Error;
+                    return response;
+                }
+
+                string FileName = $"{id}{MoviePicExtension}";
+                string FilePath = Path.Combine("wwwroot/img/movies/", FileName);
+
+                using (var targetStream = File.Create(FilePath))
+                {
+                    MoviePic.CopyTo(targetStream);
+                    Console.WriteLine("File has been copied to the target location.");
+                }
+
+                // check if file was uploaded
+                if (File.Exists(FilePath))
+                {
+                    Console.WriteLine("File exists at the path after upload.");
+                    Movie.PicExtension = MoviePicExtension;
+                    Movie.HasPic = true;
+
+                    _context.Entry(Movie).State = EntityState.Modified;
+
+                    try
+                    {
+                        // SQL Equivalent: Update Movies set ... where MovieId={id}
+                        await _context.SaveChangesAsync();
+                        Console.WriteLine($"Movie updated: HasPic={Movie.HasPic}, PicExtension={Movie.PicExtension}");
+                    }
+                    catch (DbUpdateConcurrencyException)
+                    {
+                        response.Status = ServiceResponse.ServiceStatus.Error;
+                        response.Messages.Add("An error occurred updating the record");
+
+                        return response;
+                    }
+                }
+
+            }
+            else
+            {
+                response.Messages.Add("No File Content");
+                response.Status = ServiceResponse.ServiceStatus.Error;
+                return response;
+            }
+
+            response.Status = ServiceResponse.ServiceStatus.Updated;
+            return response;
         }
 
     }

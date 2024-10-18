@@ -24,6 +24,11 @@ namespace MyMovie.Models
         //A movie releases many tickets
         public ICollection<Ticket>? Tickets { get; set; }
 
+        // images stored in /wwwroot/img/movies/{movie_id}.{PicExtension}
+        public string? PicExtension { get; set; }
+
+        public bool HasPic { get; set; } = false;
+
     }
 
     public class MovieDto
@@ -44,5 +49,9 @@ namespace MyMovie.Models
         public int ticket_sold {  get; set; }
         // add ticket available  - Oct 10
         public int ticket_available { get; set; }
+
+        public bool HasPic { get; set; }
+
+        public string? MovieImgPath { get; set; }
     }
 }
